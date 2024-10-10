@@ -81,6 +81,7 @@ func NewTemporalScaler(ctx context.Context, config *scalersconfig.ScalerConfig) 
 		return nil, fmt.Errorf("failed to parse Temporal metadata: %w", err)
 	}
 
+  logger.Info("Creating Temporal client connection", "endpoint", meta.Endpoint)
 	c, err := getTemporalClient(ctx, meta, logger)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create Temporal client connection: %w", err)
@@ -96,6 +97,7 @@ func NewTemporalScaler(ctx context.Context, config *scalersconfig.ScalerConfig) 
 
 func (s *temporalScaler) Close(_ context.Context) error {
 	if s.tcl != nil {
+    s.logger.Info("Closing Temporal client connection")
 		s.tcl.Close()
 	}
 	return nil
